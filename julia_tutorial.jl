@@ -96,11 +96,120 @@ You may have to wait for the animated code below to render before beginning. Thi
 
 # ╔═╡ 7cd40f20-eca6-11ea-2670-c7ce3983da4a
 md"## Basic Julia
-Syntactically, Julia is very similar to Matlab and Python. 
+Syntactically, Julia is very similar to Matlab and Python. This first section will focus on basic Julia syntax.
 "
 
+# ╔═╡ c33bb810-eedf-11ea-3ff9-4b089d408ebe
+md"#### _Variables_
+
+We can define a variable using `=` (assignment). Then we can use its value in other expressions:"
+
+# ╔═╡ d9b8dc30-eedf-11ea-10d3-8f8523390c57
+xx = 2
+
+# ╔═╡ db0e8120-eedf-11ea-1e01-cf0cf662d8da
+yy = 6xx
+
+# ╔═╡ f86137e0-eedf-11ea-2960-77f1c0c1c119
+md"By default Julia displays the output of the last operation. (You can suppress the output by adding `;` (a semicolon) at the end.)
+"
+
+# ╔═╡ 2fc4c0d0-eee0-11ea-17d6-c338f5845682
+md" #### _Functions_"
+
+# ╔═╡ 54d56e60-eee0-11ea-24f2-a9e8ad523613
+md"We can use a short-form, definition for simple functions:"
+
+# ╔═╡ 90529e40-eee0-11ea-3b53-e3786b2d558a
+f(d) = 2 + d
+
+# ╔═╡ a125694e-eee0-11ea-11a9-673b1b987ce7
+md"Typing the function's name gives information about the function. To call it we must use parentheses:"
+
+# ╔═╡ ac223770-eee0-11ea-3daf-a9daf48598d7
+f
+
+# ╔═╡ b4ef0630-eee0-11ea-06bd-6f89c5e7bd16
+f(10)
+
+# ╔═╡ b8d47dc0-eee0-11ea-3969-cb44314f09d4
+md"For longer functions we use the following syntax with the `function` keyword and `end`:"
+
+# ╔═╡ c758c4f0-eee0-11ea-0773-810da0ebf5cb
+function cart2sphr(x,y,z)
+    az = atan(y,x); 
+    el = atan(z,sqrt(x^2 + y^2)); 
+    r = sqrt(x^2 + y^2 + z^2)
+    return az, el, r
+end
+
+# ╔═╡ 4168c920-eee1-11ea-3635-378ef85be131
+cart2sphr(45555,25533,67000000)
+
+# ╔═╡ 70d10420-eee1-11ea-19d0-dbce252376b3
+md"#### _For loops_
+Use `for` to loop through a pre-determined set of values:"
+
+# ╔═╡ b5f58440-eee1-11ea-2406-45cab0aab35a
+let s = 0
+	
+	for i in 1:10
+		s += i    # Equivalent to s = s + i
+	end
+	
+	s
+end
+
+# ╔═╡ cdc7b110-eee1-11ea-27f9-2fd428d8c3b8
+md"Here, `1:10` is a **range** representing the numbers from 1 to 10."
+
+# ╔═╡ dfca2280-eee1-11ea-162b-09124642ee3f
+md"Above we used a `let` block to define a new local variable `s`. 
+But blocks of code like this are usually better inside functions, so that they can be reused. For example, we could rewrite the above as follows:"
+
+# ╔═╡ f8b141be-eee1-11ea-0bdc-db17d4757646
+function mysum(n)
+	s = 0
+	
+	for i in 1:n
+		s += i    
+	end
+	
+	return s
+end
+
+# ╔═╡ 01fc8f50-eee2-11ea-2cd3-27ab5e6ce20b
+mysum(500)
+
+# ╔═╡ 620166a0-eee2-11ea-1097-476f7e8e0d8b
+md"#### _Conditionals: `if`_
+We can evaluate whether a condition is true or not by simply writing the condition:"
+
+# ╔═╡ 816486d0-eee2-11ea-2460-43eeab4efe0e
+my_num = 10
+
+# ╔═╡ 8cc016c0-eee2-11ea-07a4-1fc853e5d3f4
+my_num > 45
+
+# ╔═╡ a4590b20-eee2-11ea-28c1-4155be27c407
+md"We see that conditions have a Boolean (`true` or `false`) value. 
+
+We can then use `if` to control what we do based on that value:"
+
+# ╔═╡ ac98b50e-eee2-11ea-3851-1befb822ec38
+if my_num < 5
+	"small"
+	
+else
+	"big"
+	
+end
+
+# ╔═╡ bc9da8d0-eee2-11ea-24f5-95a5ef1f343d
+md"""Note that the `if` also returns the last value that was evaluated, in this case the string `"small"` or `"big"`, Since Pluto is reactive, changing the definition of `a` above will automatically cause this to be reevaluated!"""
+
 # ╔═╡ 830a7b90-eca6-11ea-30c5-dfa9a9b4d965
-md" Lets start by making some basic arrays:"
+md" #### _Basic Arrays_"
 
 # ╔═╡ 8b42ab70-eca6-11ea-0828-a7fa1cd88119
 A = [1 2; 3 4]
@@ -301,7 +410,7 @@ begin
 	
 	
 	# initialize a 3D plot with 1 empty series
-	plt = plot3d(
+	plt = Plots.plot3d(
 	    1,
 	    xlim = (-30, 30),
 	    ylim = (-30, 30),
@@ -479,7 +588,32 @@ and _surf_ to specify that we want a surface to be plotted instead of a mesh or 
 # ╔═╡ Cell order:
 # ╠═5cf640b0-eca6-11ea-0b86-2d8c4869e0c7
 # ╟─62887de0-eca6-11ea-2fea-0f79ebe77675
-# ╟─7cd40f20-eca6-11ea-2670-c7ce3983da4a
+# ╠═7cd40f20-eca6-11ea-2670-c7ce3983da4a
+# ╟─c33bb810-eedf-11ea-3ff9-4b089d408ebe
+# ╠═d9b8dc30-eedf-11ea-10d3-8f8523390c57
+# ╠═db0e8120-eedf-11ea-1e01-cf0cf662d8da
+# ╟─f86137e0-eedf-11ea-2960-77f1c0c1c119
+# ╟─2fc4c0d0-eee0-11ea-17d6-c338f5845682
+# ╟─54d56e60-eee0-11ea-24f2-a9e8ad523613
+# ╠═90529e40-eee0-11ea-3b53-e3786b2d558a
+# ╟─a125694e-eee0-11ea-11a9-673b1b987ce7
+# ╠═ac223770-eee0-11ea-3daf-a9daf48598d7
+# ╠═b4ef0630-eee0-11ea-06bd-6f89c5e7bd16
+# ╟─b8d47dc0-eee0-11ea-3969-cb44314f09d4
+# ╠═c758c4f0-eee0-11ea-0773-810da0ebf5cb
+# ╠═4168c920-eee1-11ea-3635-378ef85be131
+# ╟─70d10420-eee1-11ea-19d0-dbce252376b3
+# ╠═b5f58440-eee1-11ea-2406-45cab0aab35a
+# ╟─cdc7b110-eee1-11ea-27f9-2fd428d8c3b8
+# ╟─dfca2280-eee1-11ea-162b-09124642ee3f
+# ╠═f8b141be-eee1-11ea-0bdc-db17d4757646
+# ╠═01fc8f50-eee2-11ea-2cd3-27ab5e6ce20b
+# ╟─620166a0-eee2-11ea-1097-476f7e8e0d8b
+# ╠═816486d0-eee2-11ea-2460-43eeab4efe0e
+# ╠═8cc016c0-eee2-11ea-07a4-1fc853e5d3f4
+# ╟─a4590b20-eee2-11ea-28c1-4155be27c407
+# ╠═ac98b50e-eee2-11ea-3851-1befb822ec38
+# ╟─bc9da8d0-eee2-11ea-24f5-95a5ef1f343d
 # ╟─830a7b90-eca6-11ea-30c5-dfa9a9b4d965
 # ╠═8b42ab70-eca6-11ea-0828-a7fa1cd88119
 # ╟─91beac60-eca6-11ea-289d-1168c1c37034
@@ -515,7 +649,7 @@ and _surf_ to specify that we want a surface to be plotted instead of a mesh or 
 # ╠═18c19040-ecd1-11ea-2d62-f1a4dc8ebd29
 # ╠═ed850f80-ecce-11ea-29c0-cbc586063758
 # ╠═0ebd16c2-eccf-11ea-2a5d-d1d0aa8f3170
-# ╠═cadd925e-ecd1-11ea-3a6b-bbfe0ec63bfe
+# ╟─cadd925e-ecd1-11ea-3a6b-bbfe0ec63bfe
 # ╟─ed977d80-ecb7-11ea-392b-470697909b9d
 # ╠═9058e030-ecb9-11ea-1221-f554216087d2
 # ╠═961ab8e0-ecb9-11ea-1369-3f80d56aa17e
